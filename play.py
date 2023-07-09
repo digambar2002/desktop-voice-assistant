@@ -1,25 +1,23 @@
 import requests
+import os
 
-url = "https://openai80.p.rapidapi.com/chat/completions"
+url = "https://spotify23.p.rapidapi.com/search/"
 
-payload = {
-	"model": "gpt-3.5-turbo",
-	"messages": [
-		{
-			"role": "user",
-			"content": "Addition of two numbers program"
-		}
-	]
-}
+querystring = {"q":"Maan Meri Jaan","type":"tracks","offset":"0","limit":"10","numberOfTopResults":"5"}
+
 headers = {
-	"content-type": "application/json",
 	"X-RapidAPI-Key": "d68c7a4ca0mshfe7db0559a72ad6p1f118fjsnb3beeaa77aac",
-	"X-RapidAPI-Host": "openai80.p.rapidapi.com"
+	"X-RapidAPI-Host": "spotify23.p.rapidapi.com"
 }
 
-response = requests.post(url, json=payload, headers=headers)
+response = requests.get(url, headers=headers, params=querystring)
+items = response.json()['tracks']['items']
 
-choice = response.json()['choices']
-list =  choice[0]
-message = list['message']
-print(message)
+song = ""
+for x in items:
+	song = x['data']['id']
+	break
+
+print(song)
+command = "start spotify:track:"+song
+os.system(command)

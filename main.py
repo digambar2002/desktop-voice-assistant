@@ -9,6 +9,7 @@ from statistics import mode
 import eel
 
 # to run subprocess
+
 import subprocess
 
 # Carry all commands
@@ -43,20 +44,20 @@ def start():
     # Start Jarivs by GUI
     @eel.expose
     def Start():
-        subprocess.call([r'static\\devices.bat'])
+        subprocess.call([r'static\\device.bat'])
         # os.system("static\\devices.bat")
         eel.AssistantName(ASSISTANT_NAME)
 
         from engine.features import auth_protocol
-        # auth_protocol()
-        # flag = AuthenticateFace()
-        flag =1 #skip face authenticate
+        auth_protocol()
+        flag = AuthenticateFace()
+        #flag =1 #skip face authenticate
         print(flag)
         if flag == 1:
 
-            # eel.hideFaceAuth()
-            # speak("Face authentication successfull")
-            # eel.hideFaceAuthSuccess()
+            eel.hideFaceAuth()
+            speak("Face authentication successfull")
+            eel.hideFaceAuthSuccess()
 
             from engine.features import wish
             wish()

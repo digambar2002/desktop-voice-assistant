@@ -412,7 +412,7 @@ body {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
   height: 40px;
 
 }
@@ -424,13 +424,13 @@ body {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #002bff;
+  background: #272727;
   border-radius: 20px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #002bff;
+  background: #353535;
 }
 
 /* Table Scroll Property */
@@ -536,4 +536,32 @@ svg {
   
 }
 
+}
+
+/* Chat Box  */
+
+.chat-canvas{
+  background-color: #191919
+}
+
+.receiver_message{
+  padding: 8px;
+  border: 2px solid cyan;
+  border-radius: 0px 15px 15px 20px;
+  width: auto;
+  color: white;
+  background-color: #0dcaf014;
+}
+
+.sender_message{
+  padding: 8px;
+  border: 1px solid #0045ff;
+  border-radius: 15px 15px 0px 20px;
+  width: auto;
+  color: white;
+  background-color: #0045ff;
+}
+.width-size{
+  max-width: 80%;
+  width: auto;
 }

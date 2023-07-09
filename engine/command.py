@@ -27,6 +27,7 @@ engine.setProperty('rate', 174)
 def speak(audio):
     engine.say(audio)
     eel.SpeakMessage(audio)
+    eel.receiverText(audio)
     engine.runAndWait()
 
 
@@ -60,10 +61,12 @@ def allCommands(typequery=1):
     # input from chatbox
     if typequery == 1:
         query = takecommand()
+        eel.senderText(query)
     else:
         eel.SpeakMessage(typequery)
         time.sleep(2)
         query = typequery
+        eel.senderText(query)
 
     if "open" in query:
         from engine.features import openCommand
@@ -94,7 +97,7 @@ def allCommands(typequery=1):
         from engine.features import MakeCall
         MakeCall(query)
 
-    elif "happy" in query or "day" in query:
+    elif "happy" in query :
         speak("Thank You Sir")
 
     elif "battery status" in query or "power status" in query:
@@ -105,6 +108,14 @@ def allCommands(typequery=1):
         speak("shutdown process started")
         speak("Have a good day "+OWNER_NAME)
         os.system('shutdown -s')
+
+    elif "send message" in query:
+        from engine.features import sendMessage
+        sendMessage(query)
+        # speak("sending message")
+    elif "play song" in query or "play music" in query or "play" in query:
+        from engine.features import spotifyPlayer
+        spotifyPlayer(query)
 
     else:
         if query == "none":

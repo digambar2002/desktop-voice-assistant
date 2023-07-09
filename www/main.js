@@ -4,9 +4,11 @@ $(document).ready(function () {
     eel.expose(AssistantName)
     function AssistantName(name) {
         document.title = name;
-
     }
 
+
+
+    // Wishing Text when Asistant Start
     eel.expose(WishMessage)
     function WishMessage(message) {
 
@@ -14,6 +16,8 @@ $(document).ready(function () {
         $('.text').textillate('start');
 
     }
+
+    
     $('.text').textillate({
         loop: true,
         sync: true,
@@ -98,6 +102,43 @@ $(document).ready(function () {
         eel.allCommands()();
     });
 
+    //------------------------------------------- Function for chatting Start --------------------------------------------------
+    eel.expose(senderText)
+    function senderText(message) {
+        var chatBox = document.getElementById("chat-canvas-body");
+        if (message.trim() !== "") {
+            chatBox.innerHTML += `<div class="row justify-content-end mb-4">
+            <div class = "width-size">
+            <div class="sender_message">${message}</div>
+        </div>`; 
+    
+            // Scroll to the bottom of the chat box
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    }
+
+    eel.expose(receiverText)
+    function receiverText(message) {
+
+        var chatBox = document.getElementById("chat-canvas-body");
+        if (message.trim() !== "") {
+            chatBox.innerHTML += `<div class="row justify-content-start mb-4">
+            <div class = "width-size">
+            <div class="receiver_message">${message}</div>
+            </div>
+        </div>`; 
+    
+            // Scroll to the bottom of the chat box
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        
+    }
+
+
+
+
+    //---------------------------------------------- Function for chatting End -------------------------------------------------
+
 
     // Shorttcut key to activate assistant
     function doc_keyUp(e) {
@@ -140,9 +181,10 @@ $(document).ready(function () {
         $("#time").text(time);
     }
 
+    // Display Text of input
     eel.expose(SpeakMessage)
     function SpeakMessage(message) {
-        // $(".s-message").text(message);
+        
         $(".s-message li:first").text(message);
         $('.s-message').textillate('start');
 
@@ -482,32 +524,6 @@ $(document).ready(function () {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     //  Siri Wave Configuration
     var siriWave = new SiriWave({
         container: document.getElementById("siri-container"),
@@ -519,31 +535,6 @@ $(document).ready(function () {
         autostart: true,
         // color: "#eb4034",
     });
-
-    // document.getElementById("stopBtn").addEventListener("click", function () {
-    //     siriWave.setAmplitude(0)
-    //     // siriWave.start()
-
-    //     setTimeout(function () {
-    //         //your code to be executed after 1 second
-    //         siriWave.stop()
-    //         const element = document.getElementById('siri-container')
-    //         element.classList.remove('animate__animated', 'animate__fadeIn');
-    //         element.classList.add('animate__animated', 'animate__fadeOut');
-    //     }, 500);
-    // })
-    // document.getElementById("startBtn").addEventListener("click", function () {
-    //     const element = document.getElementById('siri-container')
-    //     element.classList.remove('animate__animated', 'animate__fadeOut')
-    //     element.classList.add('animate__animated', 'animate__fadeIn');
-    //     siriWave.setAmplitude(0.9)
-    //     siriWave.start()
-    // })
-
-
-    // window.oncontextmenu = function () {
-    //     return false;
-    // };
 
     document.addEventListener("keydown", function (event) {
         var key = event.key || event.keyCode;

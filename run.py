@@ -12,7 +12,7 @@ def process1():
     print("Process 1 is running.")
     from main import start
     start()
-
+ 
 # To run hotword
 def process2():
     # Code for process 2

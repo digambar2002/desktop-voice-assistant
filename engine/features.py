@@ -69,6 +69,7 @@ def speak(audio):
     engine.say(audio)
     eel.WishMessage(audio)
     eel.SpeakMessage(audio)
+    eel.receiverText(audio)
     engine.runAndWait()
     return audio
 
@@ -244,39 +245,27 @@ def chatGPT(query):
     except:
         speak("something went wrong")
 
+
 def chatGPT2(query):
     query = query.replace(ASSISTANT_NAME, "")
     query = query.replace("search", "")
-
-    import openai
-    openai.api_key = "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"
     prompt = query
 
     try:
 
-        url = "https://openai80.p.rapidapi.com/chat/completions"
+        url = "https://open-ai21.p.rapidapi.com/chat"
 
-        payload = {
-            "model": "gpt-3.5-turbo",
-            "messages": [
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
-        }
+        payload = {"message": prompt}
         headers = {
             "content-type": "application/json",
             "X-RapidAPI-Key": "d68c7a4ca0mshfe7db0559a72ad6p1f118fjsnb3beeaa77aac",
-            "X-RapidAPI-Host": "openai80.p.rapidapi.com"
+            "X-RapidAPI-Host": "open-ai21.p.rapidapi.com"
         }
 
         response = requests.post(url, json=payload, headers=headers)
-        choice = response.json()['choices']
-        list =  choice[0]
-        message = list['message']
+        message = response.json()['ChatGPT']
         print(message)
-        speak(message['content'])
+        speak(message)
     except:
         speak("something went wrong")
 
@@ -364,14 +353,22 @@ def weather(query):
 
 #  ************************************************** WEATHER METHOD Ends **********************************************
 
-# Assistant name
-@eel.expose
-def assistantName():
-    name = ASSISTANT_NAME
-    return name
+
+def sendMessage(query):
+    query = query.replace(ASSISTANT_NAME, "")
+    query = query.replace("send", "")
+    query = query.replace("message", "")
+    query = query.replace("to", "")
+    query = query.replace("wahtsapp", "")
+    print(query.strip())
+    cursor.execute(
+        cursor.execute(
+            "SELECT mobileno FROM phonebook WHERE name='%s'" % query.strip().lower()))
+    results = cursor.fetchall()
+    print(results)
+
+
 # Make Phone Call Command
-
-
 def MakeCall(query):
     query = query.replace(ASSISTANT_NAME, "")
     query = query.replace("to", "")
@@ -403,6 +400,47 @@ def systemCommand():
     cursor.execute("SELECT * FROM sys_command")
     results = cursor.fetchall()
     print(results)
+
+
+# Music Player
+
+def spotifyPlayer(query):
+    query = query.replace(ASSISTANT_NAME, "")
+    query = query.replace("to", "")
+    query = query.replace("play", "")
+    query = query.replace("song", "")
+    query = query.replace("music", "")
+    query = query.replace("spotify", "")
+
+    url = "https://spotify23.p.rapidapi.com/search/"
+
+    querystring = {"q": query, "type": "tracks", "offset": "0",
+                   "limit": "10", "numberOfTopResults": "5"}
+
+    headers = {
+        "X-RapidAPI-Key": "d68c7a4ca0mshfe7db0559a72ad6p1f118fjsnb3beeaa77aac",
+        "X-RapidAPI-Host": "spotify23.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers, params=querystring)
+    items = response.json()['tracks']['items']
+
+    song = ""
+    for x in items:
+        song = x['data']['id']
+        break
+
+    print(song)
+    speak("Playing "+query)
+    command = "start spotify:track:"+song
+    os.system(command)
+
+
+# Assistant name
+@eel.expose
+def assistantName():
+    name = ASSISTANT_NAME
+    return name
 
 
 @eel.expose
