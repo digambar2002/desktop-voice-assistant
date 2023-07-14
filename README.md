@@ -1,5 +1,5 @@
 
-# Disha Desktop Assistant
+# Desktop Assistant
 
 Disha is a virtual Assistant developed to overcome the Microsoft Cortana. When I use Cortana I can't open any application I find other alternatives but I didn't find anything. So I decide to make an Assistant for Desktop which is fully functional.
 ## Features
