@@ -1,3 +1,4 @@
+import re
 from engine.config import *
 from unittest import result
 import requests
@@ -72,6 +73,13 @@ def speak(audio):
     eel.receiverText(audio)
     engine.runAndWait()
     return audio
+
+
+# Main words function
+def remove_words(word_list, string):
+    pattern = r'\b(?:%s)\b' % '|'.join(word_list)
+    modified_string = re.sub(pattern, ' ', string, flags=re.IGNORECASE)
+    return modified_string
 
 
 def auth_protocol():
@@ -325,47 +333,64 @@ def weather(query):
     query = query.replace("weather", "")
     query = query.replace("of", "")
     query = query.replace("in", "")
-    if len(query) > 0:
-        city = query+" weather"
-    else:
+    print(query)
+    if query == "":
         city = CITY_NAME + " weather"
-    city = city.replace(" ", "+")
-    res = requests.get(
-        f'https://www.google.com/search?q={city}&oq={city}&aqs=chrome.0.35i39l2j0l4j46j69i60.6128j1j7&sourceid=chrome&ie=UTF-8', headers=headers)
-    print("Searching...\n")
-    soup = BeautifulSoup(res.text, 'html.parser')
+    else:
+        city = query+" weather"
 
     try:
 
-        location = soup.select('#wob_loc')[0].getText().strip()
-        time = soup.select('#wob_dts')[0].getText().strip()
-        info = soup.select('#wob_dc')[0].getText().strip()
-        weather = soup.select('#wob_tm')[0].getText().strip()
-        print(location)
-        print(time)
-        print(info)
-        print(weather+"°C")
-        eel.weatherShow(info, weather+" °C", location, time)
-        speak("its "+weather+" degree celsius and "+info+" in "+location)
+        url = "https://weatherapi-com.p.rapidapi.com/current.json"
+
+        querystring = {"q": city}
+
+        headers = {
+            "X-RapidAPI-Key": "d68c7a4ca0mshfe7db0559a72ad6p1f118fjsnb3beeaa77aac",
+            "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers, params=querystring)
+
+        weather = response.json()['current']['feelslike_c']
+        info = response.json()['current']['wind_kph']
+
+        eel.weatherShow(info, str(weather) +" °C", city, time)
+        speak("its "+str(weather)+" degree celsius and wind speed is "+str(weather)+" kilometer per hour in "+city)
     except IndexError:
         speak("Can't found city " + query)
 
 
 #  ************************************************** WEATHER METHOD Ends **********************************************
 
-
+# Whatsapp Message Sending
 def sendMessage(query):
     query = query.replace(ASSISTANT_NAME, "")
     query = query.replace("send", "")
     query = query.replace("message", "")
     query = query.replace("to", "")
     query = query.replace("wahtsapp", "")
-    print(query.strip())
-    cursor.execute(
+    try:
         cursor.execute(
-            "SELECT mobileno FROM phonebook WHERE name='%s'" % query.strip().lower()))
-    results = cursor.fetchall()
-    print(results)
+            "SELECT mobileno FROM phonebook WHERE name='%s'" % query.strip().lower())
+        results = cursor.fetchall()
+        return results[0][0]
+    except:
+        speak('not exist in contacts')
+        return 0
+
+
+def whatsAppSend(mobile_no, message):
+    current_time = datetime.datetime.now()
+    current_hour = current_time.hour
+    current_minute = current_time.minute
+    try:
+        speak("sending message ....")
+        kit.sendwhatmsg(mobile_no, message, current_hour, current_minute+1)
+        speak("message sent successfully")
+
+    except:
+        speak("something went wrong")
 
 
 # Make Phone Call Command
@@ -405,16 +430,13 @@ def systemCommand():
 # Music Player
 
 def spotifyPlayer(query):
-    query = query.replace(ASSISTANT_NAME, "")
-    query = query.replace("to", "")
-    query = query.replace("play", "")
-    query = query.replace("song", "")
-    query = query.replace("music", "")
-    query = query.replace("spotify", "")
+    word_list = [ASSISTANT_NAME, 'play', 'music', 'spotify', 'to', 'song']
+
+    songName = remove_words(word_list, query)
 
     url = "https://spotify23.p.rapidapi.com/search/"
 
-    querystring = {"q": query, "type": "tracks", "offset": "0",
+    querystring = {"q": songName, "type": "tracks", "offset": "0",
                    "limit": "10", "numberOfTopResults": "5"}
 
     headers = {
@@ -431,7 +453,7 @@ def spotifyPlayer(query):
         break
 
     print(song)
-    speak("Playing "+query)
+    speak("Playing"+songName+" on Spotify")
     command = "start spotify:track:"+song
     os.system(command)
 

@@ -1,5 +1,7 @@
 import os
 from tracemalloc import stop
+
+import pywhatkit
 from engine.config import *
 
 import time
@@ -58,6 +60,7 @@ def allCommands(typequery=1):
 
     histring = 'hi '+ASSISTANT_NAME
     print()
+    
     # input from chatbox
     if typequery == 1:
         query = takecommand()
@@ -111,8 +114,15 @@ def allCommands(typequery=1):
 
     elif "send message" in query:
         from engine.features import sendMessage
-        sendMessage(query)
-        # speak("sending message")
+        contact_no = sendMessage(query)
+
+        if(contact_no != 0):
+
+            speak("what message to send")
+            query = takecommand()
+            from engine.features import whatsAppSend
+            whatsAppSend("+91"+contact_no, query)
+
     elif "play song" in query or "play music" in query or "play" in query:
         from engine.features import spotifyPlayer
         spotifyPlayer(query)

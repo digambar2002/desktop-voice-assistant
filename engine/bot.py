@@ -8,7 +8,7 @@ from engine.config import *
 
 def bot(query):
 
-    if "hi" in query or "hello" in query:
+    if query =="hi" or query =="hello":
         replay = ['hi', 'hello', 'namaste', 'hi glad to see you']
         getstr = random.choice(replay)
         return getstr+" "+OWNER_NAME

@@ -1,27 +1,29 @@
-import subprocess
-import re
+import requests
+import config
 
 
-def handle_call():
-    # Implement your desired functionality here
-    print("Incoming call alert!")
+def weather(query):
+    query = query.replace("weather", "")
+    query = query.replace("of", "")
+    query = query.replace("in", "")
+    print(query)
+    if query == "":
+        city = config.CITY_NAME + " weather"
+    else:
+        city = query+" weather"
+
+    url = "https://weatherapi-com.p.rapidapi.com/current.json"
+
+    querystring = {"q": city}
+
+    headers = {
+        "X-RapidAPI-Key": "d68c7a4ca0mshfe7db0559a72ad6p1f118fjsnb3beeaa77aac",
+        "X-RapidAPI-Host": "weatherapi-com.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers, params=querystring)
+
+    print(response.json()['current']['feelslike_c'])
 
 
-def monitor_calls():
-    print("runnig")
-    adb_command = ['adb', 'shell', 'dumpsys', 'telephony.registry']
-    pattern = r"mCallState(?:String)?=\s*(\d+)"
-
-    while True:
-        print("runnig")
-        result = subprocess.run(adb_command, capture_output=True, text=True)
-        output = result.stdout.strip()
-
-        match = re.search(pattern, output)
-        if match:
-            call_state = int(match.group().split("=")[1])
-            if call_state == 2:  # CALL_STATE_RINGING
-                handle_call()
-
-
-monitor_calls()
+weather("weather in Jalgaon")
