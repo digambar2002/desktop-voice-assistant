@@ -1,3 +1,5 @@
 
 env/
 engine/private_key.json
+authenticate/samples
+authenticate/trainer
