@@ -61,7 +61,7 @@ def allCommands(typequery=1):
     histring = 'hi '+ASSISTANT_NAME
     print()
     
-    # input from chatbox
+    # input from chatbox 
     if typequery == 1:
         query = takecommand()
         eel.senderText(query)

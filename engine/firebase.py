@@ -1,3 +1,5 @@
+# Not important in project you can safely delete it 
+
 import threading
 import firebase_admin
 from firebase_admin import credentials
@@ -34,6 +36,8 @@ def on_snapshot(doc_snapshot, changes, read_time):
                     else:
                         db.collection('phone').document('j1').update({'pickupCall':False})
                 continue
+            elif result['wakeup'] == True:
+                speak("Boss How can i Assist You")
 
 # Create a reference to the document to watch for changes
 doc_ref = db.collection('phone').document('j1')

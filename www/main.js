@@ -70,6 +70,7 @@ $(document).ready(function () {
     function hideFaceAuthSuccess() {
 
         $("#FaceAuthSuccess").attr("hidden", true);
+        $("#HelloGreet").attr("hidden", false);
 
     }
 

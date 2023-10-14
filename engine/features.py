@@ -150,7 +150,7 @@ def wish():
         eel.WishMessage(speak("Hello, Good Afternoon "+OWNER_NAME))
     else:
         eel.WishMessage(speak("Hello, Good Evening "+OWNER_NAME))
-
+    
     speak('How can i help you')
 
 # Open Commands
@@ -160,6 +160,7 @@ def openCommand(query):
     query = query.replace(ASSISTANT_NAME, "")
     query = query.replace("open", "")
     query.lower()
+    
     # System Command
     if query in query:
         cursor.execute(
@@ -182,7 +183,11 @@ def openCommand(query):
                 speak("Opening "+query)
                 webbrowser.open(path)
             else:
-                speak(query+" Not Found !")
+                
+                try:
+                    os.system('start '+query)
+                except:
+                    speak("not found")
     else:
         pass
 

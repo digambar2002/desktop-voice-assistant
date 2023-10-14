@@ -48,10 +48,10 @@ def start():
         # os.system("static\\devices.bat")
         eel.AssistantName(ASSISTANT_NAME)
 
-        # from engine.features import auth_protocol
-        # auth_protocol()
-        # flag = AuthenticateFace()
-        flag =1 #skip face authenticate
+        from engine.features import auth_protocol
+        auth_protocol()
+        flag = AuthenticateFace()
+        #flag =1 #skip face authenticate
         print(flag)
         if flag == 1:
 
