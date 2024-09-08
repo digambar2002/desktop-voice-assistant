@@ -137,7 +137,7 @@ def allCommands(typequery=1):
             if returnString != 0:
                 speak(returnString)
             else:
-                from engine.features import chatGPT2
+                from engine.features import chatGPT
                 print("chat gpt run")
-                chatGPT2(query)
+                chatGPT(query)
     eel.hideSpectrum()

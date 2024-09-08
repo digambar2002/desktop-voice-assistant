@@ -39,3 +39,5 @@ def hotword():
             audio_stream.close()
         if paud is not None:
             paud.terminate()
+
+hotword()

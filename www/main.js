@@ -73,7 +73,7 @@ $(document).ready(function () {
         $("#HelloGreet").attr("hidden", false);
 
     }
-
+ 
 
     // Hide Start Page and display blob
     eel.expose(hideStart)

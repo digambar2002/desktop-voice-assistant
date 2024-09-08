@@ -241,7 +241,7 @@ def chatGPT(query):
     query = query.replace("search", "")
 
     import openai
-    openai.api_key = "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"
+    openai.api_key = "sk-ZcDBTPhw3Icv32mgjfn5T3B1kFJzZrO0jkDcU45eXzEV15q"
     prompt = query
 
     try:
